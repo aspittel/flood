@@ -26,14 +26,19 @@ const squares = document.getElementsByClassName("square");
 
 const randomElement = arr => arr[Math.floor(Math.random() * arr.length)];
 
-function getPerimeter(row, col) {
+function getSurroundingElements(row, col) {
   row = parseInt(row);
   col = parseInt(col);
 
   const toCheck = [];
+
+  // down
   if (row < squareValues.length - 1) toCheck.push(squareValues[row + 1][col]);
-  if (row > 0) toCheck.push(squareValues[row - 1][col]);
+  // right
   if (col < squareValues.length - 1) toCheck.push(squareValues[row][col + 1]);
+  // up
+  if (row > 0) toCheck.push(squareValues[row - 1][col]);
+  // left
   if (col > 0) toCheck.push(squareValues[row][col - 1]);
 
   return toCheck;
@@ -44,9 +49,11 @@ function expand(element, color) {
   square = squareValues[row][col];
   square.element.style.backgroundColor = color;
 
-  const squaresToCheck = getPerimeter(row, col);
+  const squaresToCheck = getSurroundingElements(row, col);
+
   squaresToCheck.forEach(squareToCheck => {
     if (flood.includes(squareToCheck)) return;
+    
     if (squareToCheck.color === color) {
       flood.push(squareToCheck);
       expand(squareToCheck, color);
